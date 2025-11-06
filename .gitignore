@@ -39,3 +39,18 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+# Fichiers secrets - NE JAMAIS PARTAGER
+
+.env.local
+
+# Dépendances (lourdes et inutiles)
+
+node_modules/
+
+# Cache de Next.js
+
+.next/
+
+# Fichiers système
+
+.DS_Store
