@@ -4,6 +4,17 @@ import { cookies } from 'next/headers';
 import { getSupabaseService } from '@/lib/supabase';
 import type { Technicien } from '@/types';
 
+const isAdminUser = (user: any) => {
+  if (!user) return false;
+  if (user.app_metadata?.role === 'admin') return true;
+  const adminEmails = (process.env.ADMIN_EMAILS || '')
+    .split(',')
+    .map((email) => email.trim().toLowerCase())
+    .filter(Boolean);
+  const userEmail = user.email?.toLowerCase();
+  return Boolean(userEmail && adminEmails.includes(userEmail));
+};
+
 // GET: Récupérer tous les techniciens
 export async function GET(request: Request) {
   // 1. Vérification Admin
@@ -14,7 +25,7 @@ export async function GET(request: Request) {
   } = await supabase.auth.getUser();
 
   // Utiliser app_metadata (contrôlé côté serveur)
-  if (!user || user.app_metadata?.role !== 'admin') {
+  if (!isAdminUser(user)) {
     return NextResponse.json(
       { error: 'Accès interdit. Administrateur requis.' },
       { status: 403 }
@@ -46,7 +57,7 @@ export async function POST(request: Request) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!user || user.app_metadata?.role !== 'admin') {
+  if (!isAdminUser(user)) {
     return NextResponse.json(
       { error: 'Accès interdit. Administrateur requis.' },
       { status: 403 }

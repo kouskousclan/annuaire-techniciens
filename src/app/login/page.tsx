@@ -24,32 +24,28 @@ export default function LoginPage() {
     });
 
     if (signInError) {
-      setError("Email ou mot de passe incorrect."); // Message g√©n√©rique pour la s√©curit√©
+      setError('Email ou mot de passe incorrect.');
       setLoading(false);
-    } else {
-      // Redirige vers la page principale apr√®s connexion
-      router.push('/');
-      router.refresh(); // Force la mise √† jour de la session
+      return;
     }
+
+    router.push('/');
+    router.refresh();
   };
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center items-center p-4">
       <div className="w-full max-w-md bg-white p-8 rounded-xl shadow-2xl border border-gray-200">
         <h1 className="text-3xl font-extrabold text-center text-gray-900 mb-6">
-          Acc√®s R√©serv√©
+          Acces Reserve
         </h1>
         <p className="text-center text-gray-600 mb-6">
-          Veuillez vous connecter pour acc√©der √† l'annuaire.
+          Veuillez vous connecter pour acceder a l'annuaire.
         </p>
 
         <form onSubmit={handleSignIn} className="space-y-6">
-          {/* Champ Email */}
           <div>
-            <label
-              htmlFor="email"
-              className="block text-sm font-medium text-gray-700"
-            >
+            <label htmlFor="email" className="block text-sm font-medium text-gray-700">
               Adresse Email
             </label>
             <div className="mt-1 relative rounded-md shadow-sm">
@@ -66,17 +62,13 @@ export default function LoginPage() {
                 onChange={(e) => setEmail(e.target.value)}
                 disabled={loading}
                 className="block w-full p-3 pl-10 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
-                placeholder="ïïïïïïïï"
+                placeholder="vous@exemple.com"
               />
             </div>
           </div>
 
-          {/* Champ Mot de passe */}
           <div>
-            <label
-              htmlFor="password"
-              className="block text-sm font-medium text-gray-700"
-            >
+            <label htmlFor="password" className="block text-sm font-medium text-gray-700">
               Mot de passe
             </label>
             <div className="mt-1 relative rounded-md shadow-sm">
@@ -93,22 +85,18 @@ export default function LoginPage() {
                 onChange={(e) => setPassword(e.target.value)}
                 disabled={loading}
                 className="block w-full p-3 pl-10 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
-                placeholder="ïïïïïïïï"
+                placeholder="********"
               />
             </div>
           </div>
 
-          {/* Affichage de l'erreur */}
           {error && (
             <div className="mt-4 p-3 flex items-start bg-red-100 text-red-700 border border-red-300 rounded-lg">
               <AlertTriangle className="h-5 w-5 mt-0.5 mr-2 flex-shrink-0" />
-              <p className="font-medium text-sm">
-                {error}
-              </p>
+              <p className="font-medium text-sm">{error}</p>
             </div>
           )}
 
-          {/* Bouton de connexion */}
           <div>
             <button
               type="submit"

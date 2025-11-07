@@ -4,6 +4,17 @@ import { cookies } from 'next/headers';
 import { getSupabaseService } from '@/lib/supabase';
 import type { Technicien } from '@/types';
 
+const isAdminUser = (user: any) => {
+  if (!user) return false;
+  if (user.app_metadata?.role === 'admin') return true;
+  const adminEmails = (process.env.ADMIN_EMAILS || '')
+    .split(',')
+    .map((email) => email.trim().toLowerCase())
+    .filter(Boolean);
+  const userEmail = user.email?.toLowerCase();
+  return Boolean(userEmail && adminEmails.includes(userEmail));
+};
+
 // PUT: Mettre à jour un technicien par son ID
 export async function PUT(
   request: Request,
@@ -16,7 +27,7 @@ export async function PUT(
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!user || user.app_metadata?.role !== 'admin') {
+  if (!isAdminUser(user)) {
     return NextResponse.json(
       { error: 'Accès interdit. Administrateur requis.' },
       { status: 403 }
@@ -112,7 +123,7 @@ export async function DELETE(
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!user || user.app_metadata?.role !== 'admin') {
+  if (!isAdminUser(user)) {
     return NextResponse.json(
       { error: 'Accès interdit. Administrateur requis.' },
       { status: 403 }
