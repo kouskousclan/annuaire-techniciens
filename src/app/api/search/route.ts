@@ -17,32 +17,24 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: 'Le paramètre "code" est manquant.' }, { status: 400 });
     }
 
-    // Requête Supabase : Sélection de TOUS les champs de contact
+    // Requête Supabase : sélectionner uniquement les champs nécessaires
     const { data: techniciens, error } = await supabase
       .from('techniciens')
-      .select(`
-        nom_technicien, 
-        email_technicien, 
-        telephone_technicien, 
-        region,
-        resp_exploitation_email,
-        resp_exploitation_tel,
-        resp_tech_email,
-        resp_tech_tel
-      `)
+      .select(
+        'nom_technicien, email_technicien, telephone_technicien, region, resp_exploitation_email, resp_exploitation_tel, resp_tech_email, resp_tech_tel'
+      )
       // Le champ de recherche est 'code_technicien'
-      .eq('code_technicien', codeTechnicien.toUpperCase().trim()) 
-      .limit(50); 
+      .eq('code_technicien', codeTechnicien.toUpperCase().trim())
+      .limit(50);
 
     if (error) {
       console.error('Erreur Supabase lors de la recherche:', error);
-      return NextResponse.json({ error: `Erreur DB: ${error.message}. Code: ${error.code}` }, { status: 500 });
+      return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 });
     }
 
     return NextResponse.json(techniciens);
-
   } catch (err) {
-    console.error('Erreur inattendue dans l\'API de recherche:', err);
-    return NextResponse.json({ error: 'Erreur serveur inattendue.' }, { status: 500 });
+    console.error("Erreur inattendue dans l'API de recherche:", err);
+    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 });
   }
 }

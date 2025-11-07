@@ -26,6 +26,7 @@
     // ⬇️ AJOUT/MISE À JOUR CRUCIALE ICI ⬇️
     "paths": {
       "@/*": [
+        "./src/*",
         "./*"
       ]
     }
