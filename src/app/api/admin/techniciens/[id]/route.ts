@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
 import { cookies } from 'next/headers';
 import { getSupabaseService } from '@/lib/supabase';
@@ -17,8 +17,8 @@ const isAdminUser = (user: any) => {
 
 // PUT: Mettre à jour un technicien par son ID
 export async function PUT(
-  request: Request,
-  { params }: { params: { id: string } }
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
 ) {
   // 1. Vérification Admin
   const cookieStore = await cookies();
@@ -35,7 +35,8 @@ export async function PUT(
   }
 
   // 2. Logique de l'API
-  const idNum = Number(params.id);
+  const { id } = await params;
+  const idNum = Number(id);
   if (!Number.isFinite(idNum)) {
     return NextResponse.json({ error: 'ID invalide' }, { status: 400 });
   }
@@ -113,8 +114,8 @@ export async function PUT(
 
 // DELETE: Supprimer un technicien par son ID
 export async function DELETE(
-  request: Request,
-  { params }: { params: { id: string } }
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
 ) {
   // 1. Vérification Admin
   const cookieStore = await cookies();
@@ -131,7 +132,8 @@ export async function DELETE(
   }
 
   // 2. Logique de l'API
-  const idNum = Number(params.id);
+  const { id } = await params;
+  const idNum = Number(id);
   if (!Number.isFinite(idNum)) {
     return NextResponse.json({ error: 'ID invalide' }, { status: 400 });
   }
