@@ -30,18 +30,12 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
-.env*
-
 # vercel
 .vercel
 
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-# Fichiers secrets - NE JAMAIS PARTAGER
-
-.env.local
 
 # Dépendances (lourdes et inutiles)
 
